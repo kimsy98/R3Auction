@@ -1,4 +1,4 @@
-# JDK 19 기반 이미지 사용 (user.jar이 JDK 19에서 빌드되었으므로)
+# JDK 19 기반 이미지 사용 (user.jar이 JDK 19에서 빌드되었으니까)
 FROM openjdk:19-jdk-slim
 
 # 컨테이너 내에서 작업할 디렉토리 설정
