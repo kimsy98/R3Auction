@@ -3,19 +3,17 @@ package com.r3a.user.entity;
 import com.r3a.user.Point;
 import com.r3a.user.RatingScore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.Objects;
 
 @Entity
 @Table
 @Getter
-@NoArgsConstructor
+@Setter
 //@RequiredArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
+@NoArgsConstructor
 public class UserEntity {
 //    UserEntity(Long id){
 //        this.id = id;
@@ -24,7 +22,12 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String userName;
+    private String email;
     private String nickName;
+    private String name;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
 
     @Embedded
     private Point point;
