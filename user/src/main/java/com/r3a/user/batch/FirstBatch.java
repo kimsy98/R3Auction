@@ -15,7 +15,9 @@ import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.domain.Sort;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Map;
@@ -52,7 +54,17 @@ public class FirstBatch {
                 .reader(userReader())
                 .processor(middleProcessor())
                 .writer(afterWriter())
+                .taskExecutor(taskExecutor())
                 .build();
+    }
+
+    private TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor exec = new ThreadPoolTaskExecutor();
+        exec.setCorePoolSize(10);
+        exec.setMaxPoolSize(10);
+        exec.setThreadNamePrefix("multi_thread_pool_job");
+        exec.initialize();
+        return exec;
     }
 
     @Bean
