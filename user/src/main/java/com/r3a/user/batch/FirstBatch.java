@@ -3,6 +3,7 @@ package com.r3a.user.batch;
 import com.r3a.user.entity.UserEntity;
 import com.r3a.user.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -13,6 +14,7 @@ import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -22,7 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Map;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Configuration
 public class FirstBatch {
 
@@ -31,7 +33,12 @@ public class FirstBatch {
 
     private final UserRepository userRepository;
 
+    private int poolSize;
 
+    @Value("${poolSize:10}")
+    public void setPoolSize(int poolSize) {
+        this.poolSize = poolSize;
+    }
 
 
     @Bean
@@ -60,8 +67,8 @@ public class FirstBatch {
 
     private TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor exec = new ThreadPoolTaskExecutor();
-        exec.setCorePoolSize(10);
-        exec.setMaxPoolSize(10);
+        exec.setCorePoolSize(poolSize);
+        exec.setMaxPoolSize(poolSize);
         exec.setThreadNamePrefix("multi_thread_pool_job");
         exec.initialize();
         return exec;
